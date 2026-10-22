@@ -3,201 +3,136 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kimmy JKT48 Phone Experience</title>
+  <title>Kimmy's iPhone 17 Pro Max</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
     body { background-color: #0b0f19; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
     
-    /* Bingkai HP */
+    /* Bingkai iPhone 17 Pro Max */
     .phone-frame {
-      width: 340px;
-      height: 680px;
+      width: 360px;
+      height: 730px;
       background-color: #000;
-      border: 12px solid #1e293b;
-      border-radius: 40px;
+      border: 10px solid #2b2b2b;
+      border-radius: 48px;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
       display: flex;
       flex-direction: column;
     }
     
-    .notch { width: 120px; height: 20px; background-color: #1e293b; margin: 0 auto; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; z-index: 100; }
+    /* Dynamic Island iOS Style */
+    .dynamic-island {
+      width: 110px; height: 28px; background-color: #000;
+      margin: 8px auto 0; border-radius: 20px; z-index: 100;
+      position: absolute; top: 5px; left: 50%; transform: translateX(-50%);
+    }
+
+    /* Status Bar */
+    .status-bar {
+      width: 100%; height: 40px; display: flex; justify-content: space-between;
+      align-items: center; padding: 0 25px; font-size: 12px; font-weight: 600; z-index: 90;
+    }
     
     /* Screen Global */
-    .screen { flex: 1; position: relative; background: linear-gradient(180deg, #2d1b4e, #1c1035); overflow: hidden; }
+    .screen { flex: 1; position: relative; background: url('https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=600') center/cover; overflow: hidden; display: flex; flex-direction: column; }
 
-    /* LAYAR KUNCI (LOCKSCREEN) */
+    /* 1. LOCKSCREEN */
     #lockscreen {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=600') center/cover;
+      background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(15px);
       display: flex; flex-direction: column; align-items: center; justify-content: space-between;
-      padding: 40px 20px 30px; z-index: 50; transition: transform 0.4s ease;
+      padding: 60px 20px 40px; z-index: 70; transition: transform 0.5s cubic-bezier(0.1, 1, 0.1, 1);
     }
-    .lock-time { font-size: 48px; font-weight: 300; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-    .lock-date { font-size: 14px; opacity: 0.9; }
-    .unlock-btn {
-      background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(10px);
-      padding: 12px 24px; border-radius: 25px; font-size: 13px; font-weight: bold;
-      cursor: pointer; border: 1px solid rgba(255,255,255,0.4); animation: pulse 1.5s infinite;
+    .lock-time { font-size: 64px; font-weight: 200; text-shadow: 0 2px 10px rgba(0,0,0,0.4); letter-spacing: -2px; }
+    .lock-date { font-size: 15px; font-weight: 500; opacity: 0.9; margin-top: -10px; }
+    
+    .passcode-container { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+    .pass-dots { display: flex; gap: 12px; }
+    .dot { width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.8); border-radius: 50%; background: transparent; transition: 0.2s; }
+    .dot.active { background: #fff; }
+    
+    .numpad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; width: 240px; }
+    .num-btn {
+      width: 65px; height: 65px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+      border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 22px;
+      font-weight: 500; cursor: pointer; user-select: none; margin: 0 auto; border: none; color: #fff;
     }
+    .num-btn:active { background: rgba(255, 255, 255, 0.4); }
+    .error-msg { font-size: 12px; color: #ff6b6b; height: 15px; font-weight: 600; }
 
-    /* HOMESCREEN (Layar Utama) */
-    .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 40px 20px; }
+    /* HOMESCREEN */
+    .homescreen { flex: 1; padding: 25px 20px; display: flex; flex-direction: column; justify-content: space-between; z-index: 10; }
+    .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px 10px; }
     .app-icon { display: flex; flex-direction: column; align-items: center; cursor: pointer; }
     .icon-box {
-      width: 58px; height: 58px; border-radius: 16px; display: flex;
-      justify-content: center; align-items: center; font-size: 26px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      width: 60px; height: 60px; border-radius: 14px; display: flex;
+      justify-content: center; align-items: center; font-size: 28px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
-    .app-name { font-size: 11px; margin-top: 6px; color: #f8fafc; }
+    .app-name { font-size: 11px; margin-top: 6px; color: #fff; text-shadow: 0 1px 4px rgba(0,0,0,0.8); font-weight: 500; }
 
-    /* APLIKASI (MODAL SLIDE-UP) */
+    /* iOS Dock */
+    .ios-dock {
+      background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(25px);
+      border-radius: 30px; padding: 12px 15px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+      margin-bottom: 5px; border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    /* APLIKASI (MODAL FULLSCREEN) */
     .app-window {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background-color: #0f172a; z-index: 40; display: none; flex-direction: column;
+      background-color: #000; z-index: 60; display: none; flex-direction: column;
     }
     .app-header {
-      padding: 15px; background: #1e293b; display: flex; align-items: center; gap: 10px; font-weight: bold; font-size: 15px;
+      padding: 45px 15px 12px; background: #121212; display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 16px; border-bottom: 1px solid #222;
     }
-    .back-btn { cursor: pointer; font-size: 18px; padding: 0 5px; }
+    .back-btn { cursor: pointer; font-size: 16px; color: #0a84ff; display: flex; align-items: center; gap: 4px; }
 
     /* GALERI FOTO */
-    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; overflow-y: auto; }
+    .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 15px; overflow-y: auto; background: #000; flex: 1; }
     .gallery-item {
-      width: 100%; height: 110px; border-radius: 10px; object-fit: cover;
-      cursor: pointer; border: 1px solid #334155;
+      width: 100%; height: 150px; border-radius: 12px; object-fit: cover;
+      cursor: pointer; border: 1px solid #222;
     }
 
-    /* WHATSAPP APP */
-    .wa-header { background-color: #075e54; color: #fff; }
-    .chat-body { flex: 1; background: #0b141a; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    /* WHATSAPP iOS STYLE */
+    .wa-header { background-color: #1f1f1f; color: #fff; border-bottom: 1px solid #333; }
+    .chat-body { flex: 1; background: #0b141a; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; }
     .chat-bubble {
-      max-width: 80%; padding: 8px 12px; border-radius: 10px; font-size: 12px; line-height: 1.4;
+      max-width: 80%; padding: 10px 14px; border-radius: 14px; font-size: 13px; line-height: 1.4; position: relative;
     }
-    .chat-in { background-color: #202c33; align-self: flex-start; border-top-left-radius: 0; }
-    .chat-out { background-color: #005c4b; align-self: flex-end; border-top-right-radius: 0; }
-    .sender-name { font-size: 10px; font-weight: bold; color: #e91e63; margin-bottom: 2px; }
-
-    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+    .chat-in { background-color: #202c33; color: #e9edef; align-self: flex-start; border-top-left-radius: 4px; }
+    .chat-out { background-color: #005c4b; color: #e9edef; align-self: flex-end; border-top-right-radius: 4px; }
+    .sender-name { font-size: 11px; font-weight: bold; color: #ff5722; margin-bottom: 3px; }
+    .chat-time { font-size: 9px; color: rgba(255,255,255,0.5); text-align: right; margin-top: 4px; }
   </style>
 </head>
 <body>
 
   <div class="phone-frame">
-    <div class="notch"></div>
+    <div class="dynamic-island"></div>
+    
     <div class="screen">
-      
-      <!-- 1. LOCKSCREEN -->
+      <!-- iOS Status Bar -->
+      <div class="status-bar">
+        <span id="current-time-bar">19:30</span>
+        <span>5G 🔋</span>
+      </div>
+
+      <!-- 1. LOCKSCREEN DENGAN PIN 080310 -->
       <div id="lockscreen">
         <div style="text-align: center;">
-          <div class="lock-time" id="clock">12:00</div>
+          <div class="lock-time" id="clock">19:30</div>
           <div class="lock-date">Kamis, 22 Oktober</div>
         </div>
-        <div class="unlock-btn" onclick="unlockPhone()">🔒 Klik untuk Buka HP Kimmy</div>
-      </div>
-
-      <!-- 2. HOMESCREEN -->
-      <div class="app-grid">
-        <!-- Galeri -->
-        <div class="app-icon" onclick="openApp('galleryApp')">
-          <div class="icon-box" style="background: linear-gradient(135deg, #ff7e5f, #feb47b);">🖼️</div>
-          <span class="app-name">Galeri</span>
-        </div>
         
-        <!-- WhatsApp -->
-        <div class="app-icon" onclick="openApp('waApp')">
-          <div class="icon-box" style="background: #25D366;">💬</div>
-          <span class="app-name">WhatsApp</span>
-        </div>
-
-        <!-- Notes -->
-        <div class="app-icon" onclick="openApp('notesApp')">
-          <div class="icon-box" style="background: linear-gradient(135deg, #ffb347, #ffcc33);">📝</div>
-          <span class="app-name">Catatan</span>
-        </div>
-      </div>
-
-      <!-- 3. APLIKASI GALERI -->
-      <div id="galleryApp" class="app-window">
-        <div class="app-header">
-          <span class="back-btn" onclick="closeApp('galleryApp')">⬅️</span>
-          <span>Galeri Foto Kimmy</span>
-        </div>
-        <div class="gallery-grid">
-          <!-- Kamu bisa ganti URL foto di bawah ini dengan foto Kimmy JKT48 pilihanmu -->
-          <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400" class="gallery-item" onclick="alert('Foto Selfie Kimmy di Teater JKT48!')">
-          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?q=80&w=400" class="gallery-item" onclick="alert('Foto OOTD Latihan Dance')">
-          <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=400" class="gallery-item" onclick="alert('Behind The Scenes Video Call Event')">
-          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=400" class="gallery-item" onclick="alert('Foto Makanan Favorit Kimmy')">
-        </div>
-      </div>
-
-      <!-- 4. APLIKASI WHATSAPP -->
-      <div id="waApp" class="app-window">
-        <div class="app-header wa-header">
-          <span class="back-btn" onclick="closeApp('waApp')">⬅️</span>
-          <span>WhatsApp (Grup JKT48)</span>
-        </div>
-        <div class="chat-body">
-          <div class="chat-bubble chat-in">
-            <div class="sender-name">Freya JKT48</div>
-            Kimmyy, hari ini jadwal GR teater jam berapa ya?
-          </div>
-          <div class="chat-bubble chat-out">
-            Jam 3 sore Frey! Jangan lupa bawa kostum latihan yaaa 💃
-          </div>
-          <div class="chat-bubble chat-in">
-            <div class="sender-name">Christy JKT48</div>
-            Guys, nanti abis latihan beli boba bareng yuk! 🧋
-          </div>
-          <div class="chat-bubble chat-out">
-            GASSS Beli! Aku yang pesan lewat ojol deh 😋
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. APLIKASI NOTES -->
-      <div id="notesApp" class="app-window">
-        <div class="app-header">
-          <span class="back-btn" onclick="closeApp('notesApp')">⬅️</span>
-          <span>Catatan Rahasia</span>
-        </div>
-        <div style="padding: 15px; font-size: 13px; line-height: 1.6; color: #cbd5e1;">
-          📌 <strong>Target Bulan Ini:</strong><br>
-          - Hafalin koreo setlist baru 🕺<br>
-          - Sapa fans di JKT48 PM / Live Showroom ✨<br>
-          - Jangan lupa minum vitamin & tidur cukup 😴
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <script>
-    // Update Jam Realtime
-    function updateClock() {
-      const now = new Date();
-      const hours = String(now.getHours()).padStart(2, '0');
-      const minutes = String(now.getMinutes()).padStart(2, '0');
-      document.getElementById('clock').innerText = `${hours}:${minutes}`;
-    }
-    setInterval(updateClock, 1000);
-    updateClock();
-
-    // Buka Lockscreen
-    function unlockPhone() {
-      document.getElementById('lockscreen').style.transform = 'translateY(-100%)';
-    }
-
-    // Buka & Tutup Aplikasi
-    function openApp(appId) {
-      document.getElementById(appId).style.display = 'flex';
-    }
-    function closeApp(appId) {
-      document.getElementById(appId).style.display = 'none';
-    }
-  </script>
-
-</body>
-</html>
+        <div class="passcode-container">
+          <div style="font-size: 13px; font-weight: 500; letter-spacing: 0.5px;">Masukkan Sandi (080310)</div>
+          <div class="pass-dots">
+            <div class="dot" id="d1"></div>
+            <div class="dot" id="d2"></div>
+            <div class="dot" id="d3"></div>
+            <div class="dot" id="d4"></div>
+            <div class="dot" id="d5"></div>
